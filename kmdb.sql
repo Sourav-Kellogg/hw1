@@ -113,8 +113,40 @@
 -- Drop existing tables, so you'll start fresh each time this script is run.
 -- TODO!
 
--- Create new tables, according to your domain model
--- TODO!
+DROP TABLE IF EXISTS studios;
+DROP TABLE IF EXISTS movies;
+DROP TABLE IF EXISTS actors;
+DROP TABLE IF EXISTS castings;
+
+CREATE TABLE studios (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL
+);
+
+CREATE TABLE movies (
+  id INTEGER PRIMARY KEY,
+  title TEXT NOT NULL,
+  year INTEGER NOT NULL,
+  rating TEXT NOT NULL,
+  studio_id INTEGER NOT NULL,
+  FOREIGN KEY (studio_id) REFERENCES studios(id)
+);
+
+CREATE TABLE actors (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL
+);
+
+CREATE TABLE castings (
+  id INTEGER PRIMARY KEY,
+  movie_id INTEGER NOT NULL,
+  actor_id INTEGER NOT NULL,
+  character_name TEXT NOT NULL,
+  FOREIGN KEY (movie_id) REFERENCES movies(id),
+  FOREIGN KEY (actor_id) REFERENCES actors(id)
+);
+
+
 
 -- Insert data into your database that reflects the sample data shown above
 -- Use hard-coded foreign key IDs when necessary
@@ -137,3 +169,13 @@
 
 -- The SQL statement for the cast output
 -- TODO!
+
+SELECT
+  movies.title,
+  actors.name,
+  castings.character_name
+FROM
+  castings
+JOIN movies ON castings.movie_id = movies.id
+JOIN actors ON castings.actor_id = actors.id;
+
